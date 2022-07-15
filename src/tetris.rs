@@ -1,19 +1,19 @@
-use crate::shape::Shape;
+use crate::shape::{Pos, Shape};
 
 #[derive(Debug)]
 pub struct Tetris {
-    width: usize,
-    height: usize,
+    width: u32,
+    height: u32,
     current_shape: Shape,
     fixed_shapes: Vec<Shape>,
 }
 
 impl Tetris {
-    pub fn new(width: usize, height: usize) -> Self {
+    pub fn new(width: u32, height: u32) -> Self {
         Self {
             width,
             height,
-            current_shape: Shape::new_random(),
+            current_shape: &Shape::new_random() + Pos((width / 2) as i32, 0),
             fixed_shapes: vec![],
         }
     }
@@ -25,6 +25,6 @@ mod tests {
 
     #[test]
     fn test() {
-        println!("{:#?}", Tetris::new(5, 10));
+        println!("{:#?}", Tetris::new(100, 10));
     }
 }
