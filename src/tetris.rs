@@ -67,6 +67,16 @@ impl Tetris {
             self.current_shape = translated_current_shape;
         }
     }
+
+    pub fn rotate(&mut self) {
+        let rotated_current_shape = self.current_shape.rotated();
+
+        if !self.is_out_of_bounds(&rotated_current_shape)
+            && !self.is_colliding(&rotated_current_shape)
+        {
+            self.current_shape = rotated_current_shape;
+        }
+    }
 }
 
 #[cfg(test)]
