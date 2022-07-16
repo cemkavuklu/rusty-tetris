@@ -6,6 +6,7 @@ pub enum Direction {
     Left,
     Right,
 }
+
 #[derive(Debug)]
 pub struct Tetris {
     width: i32,
@@ -27,7 +28,7 @@ impl Tetris {
     }
 
     pub fn is_out_of_bounds(&self, shape: &Shape) -> bool {
-        shape
+        !shape
             .iter_positions()
             .all(|pos| 0 <= pos.0 && pos.0 < self.width && 0 <= pos.1 && pos.1 < self.height)
     }
@@ -54,6 +55,14 @@ impl Tetris {
         }
     }
 
+    fn remove_full_lines(&mut self) {
+        for y in 0..self.height {
+            if self.is_line_full(y) {
+                self.remove_line(y)
+            }
+        }
+    }
+
     pub fn tick(&mut self) {
         if self.lost {
             return;
@@ -71,6 +80,7 @@ impl Tetris {
             );
 
             self.fixed_shapes.push(new_fixed_shape);
+            self.remove_full_lines();
 
             if self.is_colliding(&self.current_shape) {
                 self.lost = true;

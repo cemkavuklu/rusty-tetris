@@ -82,6 +82,13 @@ impl Shape {
             .iter()
             .copied()
             .filter(|pos| pos.1 != y)
+            .map(|pos| {
+                if pos.1 >= y {
+                    pos
+                } else {
+                    Pos(pos.0, pos.1 + 1)
+                }
+            })
             .collect();
     }
 }
