@@ -1,7 +1,11 @@
 [package]
 name = "rusty-tetris"
+authors = ["Cem Kavuklu <cemkavuklu@protonmail.com"]
+description = "A Rust implementation for the classic Tetris game to be played on the interwebs."
+license = "MIT"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/cemkavuklu/rusty-tetris"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
