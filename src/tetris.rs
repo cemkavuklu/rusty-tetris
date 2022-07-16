@@ -1,5 +1,5 @@
 use crate::shape::{Pos, Shape};
-use std::mem;
+use std::{collections::HashSet, mem};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
@@ -28,7 +28,7 @@ impl Tetris {
 
     pub fn is_out_of_bounds(&self, shape: &Shape) -> bool {
         shape
-            .positions()
+            .iter_positions()
             .all(|pos| 0 <= pos.0 && pos.0 < self.width && 0 <= pos.1 && pos.1 < self.height)
     }
 
@@ -36,6 +36,22 @@ impl Tetris {
         self.fixed_shapes
             .iter()
             .any(|fixed_shape| fixed_shape.collides_with(shape))
+    }
+
+    pub fn is_line_full(&self, y: i32) -> bool {
+        self.fixed_shapes
+            .iter()
+            .flat_map(|shape| shape.iter_positions())
+            .filter(|pos| pos.1 == y)
+            .collect::<HashSet<_>>()
+            .len() as i32
+            == self.width
+    }
+
+    fn remove_line(&mut self, y: i32) {
+        for shape in self.fixed_shapes.iter_mut() {
+            shape.remove_line(y)
+        }
     }
 
     pub fn tick(&mut self) {
