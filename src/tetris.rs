@@ -1,9 +1,11 @@
+use std::mem;
+
 use crate::shape::{Pos, Shape};
 
 #[derive(Debug)]
 pub struct Tetris {
-    width: u32,
-    height: u32,
+    width: i32,
+    height: i32,
     current_shape: Shape,
     fixed_shapes: Vec<Shape>,
 }
@@ -11,10 +13,40 @@ pub struct Tetris {
 impl Tetris {
     pub fn new(width: u32, height: u32) -> Self {
         Self {
-            width,
-            height,
+            width: width as i32,
+            height: height as i32,
             current_shape: &Shape::new_random() + Pos((width / 2) as i32, 0),
             fixed_shapes: vec![],
+        }
+    }
+
+    pub fn is_out_of_bounds(&self, shape: &Shape) -> bool {
+        shape
+            .positions()
+            .all(|pos| 0 <= pos.0 && pos.0 < self.width && 0 <= pos.1 && pos.1 < self.height)
+    }
+
+    pub fn is_colliding(&self, shape: &Shape) -> bool {
+        self.fixed_shapes
+            .iter()
+            .any(|fixed_shape| fixed_shape.collides_with(shape))
+    }
+
+    pub fn tick(&mut self) {
+        let translated_current_shape = &self.current_shape + Pos(0, 1);
+
+        if self.is_out_of_bounds(&translated_current_shape)
+            || self.is_colliding(&translated_current_shape)
+        {
+            // Make the current shape fixed
+            let new_fixed_shape = mem::replace(
+                &mut self.current_shape,
+                &Shape::new_random() + Pos(self.width / 2, 0),
+            );
+
+            self.fixed_shapes.push(new_fixed_shape);
+        } else {
+            self.current_shape = translated_current_shape;
         }
     }
 }
@@ -25,6 +57,11 @@ mod tests {
 
     #[test]
     fn test() {
-        println!("{:#?}", Tetris::new(100, 10));
+        let mut tetris = Tetris::new(10, 30);
+        tetris.tick();
+        tetris.tick();
+        tetris.tick();
+
+        println!("{:#?}", tetris);
     }
 }
