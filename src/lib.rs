@@ -82,7 +82,9 @@ impl Component for App {
             .build(c![..tetris.value().iter_positions().map(|pos| {
                 let typ = tetris.value().get(pos);
 
-                h!(div).build(c![typ.unwrap_or_default()])
+                h!(div)
+                    .style(&Style::new().margin_top("-.1em"))
+                    .build(c![typ.unwrap_or_default()])
             })])
     }
 }
