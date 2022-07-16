@@ -1,7 +1,7 @@
 use js_sys::Reflect;
 use tetris::Tetris;
 use wasm_bindgen::JsValue;
-use wasm_react::{c, export_components, h, hooks::use_state, Component};
+use wasm_react::{c, export_components, h, hooks::use_state, props::Style, Component};
 
 mod shape;
 mod tetris;
@@ -30,11 +30,21 @@ impl Component for App {
     fn render(&self) -> wasm_react::VNode {
         let tetris = use_state(|| Tetris::new(self.width, self.height));
 
-        h!(div).build(c![..tetris.value().iter_positions().map(|pos| {
-            let typ = tetris.value().get(pos);
+        h!(div)
+            .style(
+                &Style::new()
+                    .display("inline-grid")
+                    .grid_template(format!(
+                        "repeat({}, 1em) / repeat({}, 1em)",
+                        self.height, self.width
+                    ))
+                    .border("1px solid grey"),
+            )
+            .build(c![..tetris.value().iter_positions().map(|pos| {
+                let typ = tetris.value().get(pos);
 
-            h!(div).build(c![typ.unwrap_or_default()])
-        })])
+                h!(div).build(c![typ.unwrap_or_default()])
+            })])
     }
 }
 
