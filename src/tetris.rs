@@ -12,6 +12,7 @@ pub struct Tetris {
     height: i32,
     current_shape: Shape,
     fixed_shapes: Vec<Shape>,
+    lost: bool,
 }
 
 impl Tetris {
@@ -21,6 +22,7 @@ impl Tetris {
             height: height as i32,
             current_shape: &Shape::new_random() + Pos((width / 2) as i32, 0),
             fixed_shapes: vec![],
+            lost: false,
         }
     }
 
@@ -37,6 +39,10 @@ impl Tetris {
     }
 
     pub fn tick(&mut self) {
+        if self.lost {
+            return;
+        }
+
         let translated_current_shape = &self.current_shape + Pos(0, 1);
 
         if self.is_out_of_bounds(&translated_current_shape)
@@ -49,6 +55,10 @@ impl Tetris {
             );
 
             self.fixed_shapes.push(new_fixed_shape);
+
+            if self.is_colliding(&self.current_shape) {
+                self.lost = true;
+            }
         } else {
             self.current_shape = translated_current_shape;
         }
