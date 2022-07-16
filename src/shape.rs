@@ -41,6 +41,10 @@ impl Shape {
         new_z: [Pos(0, 0), Pos(-1, 0), Pos(0, 1), Pos(1, 1)] anchored at Pos(0, 0);
     }
 
+    pub fn positions(&self) -> impl Iterator<Item = Pos> + '_ {
+        self.positions.iter().copied()
+    }
+
     pub fn new_random() -> Self {
         let random = (rand::random::<f64>() * 7.0).floor() as u8;
 
