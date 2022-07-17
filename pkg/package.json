@@ -1,0 +1,21 @@
+{
+  "name": "rusty-tetris",
+  "collaborators": [
+    "Cem Kavuklu <cemkavuklu@protonmail.com"
+  ],
+  "description": "A Rust implementation for the classic Tetris game to be played on the interwebs.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cemkavuklu/rusty-tetris"
+  },
+  "files": [
+    "rusty_tetris_bg.wasm",
+    "rusty_tetris.js",
+    "rusty_tetris.d.ts"
+  ],
+  "module": "rusty_tetris.js",
+  "types": "rusty_tetris.d.ts",
+  "sideEffects": false
+}
